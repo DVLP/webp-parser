@@ -1,0 +1,4 @@
+enum placeholderToBuild {
+  "DO_THING",
+  "DO_NOTHING"
+};
