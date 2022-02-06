@@ -5,4 +5,5 @@ services:
     build: .
     volumes:
       - .:/code
-    command: bash -c "rm -f builds/astc.* && cmake -B builds && cmake --build builds"
+    command: bash -c "rm -f builds/astc.* && cmake -B builds -DCMAKE_TOOLCHAIN_FILE=/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake && cmake --build builds -j8"
+#  cmake -DCMAKE_TOOLCHAIN_FILE=$EMSCRIPTEN/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_BUILD_TYPE=Release && make

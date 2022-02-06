@@ -8,7 +8,6 @@
 #endif
 
 #include "imageio/webpdec.h"
-// #include "./unicode.h"
 
 static int verbose = 0;
 static int quiet = 0;
@@ -31,33 +30,29 @@ static const char* const kFormatType[] = {
 // WebPDecBuffer WebpToRGBA
 int WebpToRGBA(const uint8_t* data, size_t data_size, uint8_t* dest, int width, int height) {
   WebPDecoderConfig config;
+  WebPBitstreamFeatures* const bitstream = &config.input;
+
+  // config.options.flip = 1;
+
   if (!WebPInitDecoderConfig(&config)) {
     fprintf(stderr, "Library version mismatch!\n");
   }
 
-  config.options.no_fancy_upsampling = 1;
-  config.options.bypass_filtering = 1;
+  int originalWidth;
+  int originalHeight;
+  WebPGetInfo(data, data_size, &originalWidth, &originalHeight);
 
-  config.options.use_scaling = 1;
-  config.options.scaled_width  = width;
-  config.options.scaled_height = height;
-  // config.options.flip = 1;
+  // config.options.bypass_filtering = 1;
+  if (originalWidth != width && originalHeight != height) {
+    config.options.use_scaling = 1;
+    config.options.scaled_width  = width;
+    config.options.scaled_height = height;
+    config.options.no_fancy_upsampling = 1;
+  }
 
   VP8StatusCode status = VP8_STATUS_OK;
 
-  // status = WebPGetFeatures(data, data_size, bitstream);
-  // if (status != VP8_STATUS_OK) {
-  //   // WebPFree((void*)*data);
-  //   data_size = 0;
-  //   return 0;
-  // }
-
-  #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    config.output.colorspace = MODE_BGRA;
-  #else
-    config.output.colorspace = MODE_RGBA;
-  #endif
-  
+  config.output.colorspace = MODE_rgbA;
   config.output.u.RGBA.rgba = dest;
   int stride = width * 4;
   config.output.u.RGBA.stride = stride;
@@ -71,14 +66,15 @@ int WebpToRGBA(const uint8_t* data, size_t data_size, uint8_t* dest, int width, 
     return 0;
   }
 
-  if (!quiet) {
+  // if (!quiet) {
     // WFPRINTF(stderr, "Decoded data.");
-    fprintf(stderr, " Dimensions: %d x %d %s. Format: %s. Now saving...\n");
+    // fprintf(stderr, " Dimensions: %d x %d %s. Format: %s. Now saving...\n");
             // bitstream->has_alpha ? " (with alpha)" : "",
             // kFormatType[bitstream->format]);
-  }
+  // }
+  WebPFreeDecBuffer(&config.output);
   return 1;
-  // WebPFreeDecBuffer(output_buffer);
 }
+
 
 //------------------------------------------------------------------------------

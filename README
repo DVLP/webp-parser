@@ -1,1 +1,7 @@
 libwebp with stuff removed to only keep webp parsing to RGBA data
+
+Optional - Requires docker to build
+npm run build
+
+Start browser WASM example
+npm start

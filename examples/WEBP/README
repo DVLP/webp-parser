@@ -1,0 +1,6 @@
+Nice clean basic example from
+https://github.com/kenchris/wasm-webp
+
+Things useful here:
+-service worker - disabled
+-using cwrap modules with getValue(I use views on heap)

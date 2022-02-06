@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-importScripts('./webpParser.wasm.js')
+importScripts('./webp-parser.wasm.js')
 
 const viewToHeap = {
   'Int8Array': 'HEAP8', 'Int16Array': 'HEAP16', 'Int32Array': 'HEAP32', 'Uint8Array': 'HEAPU8', 'Uint16Array': 'HEAPU16',
